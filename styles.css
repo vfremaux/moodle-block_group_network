@@ -1,0 +1,23 @@
+.authorized{
+ color:#00A000;
+}
+
+.unauthorized{
+ color:#A00000;
+}
+
+.accessformlabels{
+	margin-top:15px;
+	margin-left:100px;
+}
+
+#id_disableusers,
+#id_disabledlbl,
+#id_enableusers,
+#id_enablelbl{
+	margin-right:100px;
+}
+
+.group-network-targetchoice form{
+	display:inline;
+}
