@@ -19,14 +19,16 @@ defined('MOODLE_INTERNAL') || die();
 /**
  * Form for editing profile block settings
  *
- * @package    block
- * @subpackage group_network
+ * @package    block_group_network
+ * @category   blocks
  * @author     Valery Fremaux <valery.fremaux@gmail.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class block_group_network_edit_form extends block_edit_form {
+
     protected function specific_definition($mform) {
         global $CFG;
+
         $mform->addElement('header', 'configheader', get_string('group_network_settings', 'block_group_network'));
     }
 }

@@ -1,136 +1,83 @@
-<?PHP
+<?php
+// This file is part of Moodle - http://moodle.org/
+//
+// Moodle is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
  * This is the processing part of the network assign
  * This page is called by the forms defined in single_class.php
  *
- * @package block-groupnet
+ * @package block_group_network
  * @category block
  * @author Edouard Poncelet (edouard.poncelet@gmail.com)
  * @copyright valeisti (http://www.valeisti.fr)
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL
  */
-require_once('../../config.php');
-require_once('single_class.php');
+use block_group_network\controller\net_controller;
 
-    $userid         = required_param('userid', PARAM_INT); // needed for user tabs
-    $courseid       = required_param('courseid', PARAM_INT); // needed for user tabs
-    $platformid     = required_param('platformid', PARAM_INT); //this is not the real platform id, it the the field id corresponding to it
-    $actionid       = required_param('actionid', PARAM_INT); //actionid : 1 for add    //  2 for remove //  3 for group add //  4 for group remove
-    $fieldid	    = required_param('fieldid', PARAM_INT); //id of the custom profile field
+require('../../config.php');
+require_once($CFG->dirroot.'/blocks/group_network/single_form.php');
 
-    $course = $DB->get_record('course', array('id' => $courseid));
+$userid         = required_param('userid', PARAM_INT); // needed for user tabs
+$courseid       = required_param('courseid', PARAM_INT); // needed for user tabs
+$platformid     = required_param('platformid', PARAM_INT); //this is not the real platform id, it the the field id corresponding to it
+$actionid       = required_param('actionid', PARAM_INT); //actionid : 1 for add    //  2 for remove //  3 for group add //  4 for group remove
+$fieldid        = required_param('fieldid', PARAM_INT); //id of the custom profile field
 
-    if (! $course = $DB->get_record('course', array('id' => $courseid)) ) {
-        print_error('invalidcourseid');
-    }
+if (! $course = $DB->get_record('course', array('id' => $courseid)) ) {
+    print_error('invalidcourseid');
+}
 
-    $straction = get_string('netrole', 'block_group_network');
-    $user = $DB->get_record('user', array('id' => $userid));
-    $fullstr = get_string('single_full','block_group_network');
+// Security.
 
-	$PAGE->navbar->add($course->fullname,"$CFG->wwwroot/course/view.php?id=$courseid", 'misc');
-	$PAGE->navbar->add($straction, null, 'misc');
- 
-	$PAGE->set_title($fullstr);
-	$PAGE->set_heading($SITE->fullname);
-    $url = new moodle_url('/blocks/group_network/net.php');
-    $PAGE->set_url($url, array());
-    $OUTPUT->header($fullstr, $shortstr, $navigation, '', '', false, '');
+$course = $DB->get_record('course', array('id' => $courseid));
+$context = context_course::instance($courseid);
 
-    $action = optional_param('action', '' PARAM_TEXT);
+require_login($course);
+require_capability('block/group_network:manageaccess', $context);
 
-    //Lets give some feedback to the user so he knows what is going on
+$straction = get_string('netrole', 'block_group_network');
+$user = $DB->get_record('user', array('id' => $userid));
+$fullstr = get_string('single_full','block_group_network');
 
-    echo $OUTPUT->box($OUTPUT->notification(get_string('actionnotification', 'block_group_network', $action)));
+$PAGE->navbar->add($course->fullname,new moodle_url('/course/view.php', array('id' => $courseid)), 'misc');
+$PAGE->navbar->add($straction, null, 'misc');
 
-    //Here we are going to switch on the actionid, to do the required actions.
+$PAGE->set_title($fullstr);
+$PAGE->set_heading($SITE->fullname);
+$url = new moodle_url('/blocks/group_network/net.php');
+$PAGE->set_url($url, array());
 
-    switch($actionid){
-	
-//	ADD CASE
-	case 1:
-	    $todo = optional_param_array('local', '', PARAM_INT);
-		
-		//Now the action
-		foreach($todo as $studentid){
-			$user = $DB->get_record('user', array('id' => $studentid));
-			$uid->userid = $studentid;
-			$uid->fieldid = $fieldid;
-			$uid->data =  1; // we enforce the 1 because the relative field is a checkbox that needs to be checked
-			$DB->insert_record('user_info_data', $uid);
-			echo $OUTPUT->box(get_string('usergranted', 'block_group_network', fullname($user)));
-		}
-		break;
+$action = optional_param('action', '', PARAM_TEXT);
 
-//	REMOVE CASE
-	case 2:
-		$todo = optional_param_array('net', array(), PARAM_INT);
+if ($action) {
+    require_once($CFG->dirroot.'/blocks/group_network/net.controller.php');
+    $controller = new net_controller();
+    $output = $controller->process($action, '', array('platformid' => $platformid));
+}
 
-		//Now the action
-		foreach($todo as $studentid){		
-			$user = $DB->get_record('user', array('id' => $studentid));
-			$DB->delete_records('user_info_data', array('userid' => $studentid, 'fieldid' => $fieldid));
-			echo $OUTPUT->box(get_string('userrevoked', 'block_group_network', fullname($user));			
-		}
-	    break;
+//Here we are going to switch on the actionid, to do the required actions.
 
-	case 3:
-		$todo = optional_param_array('local', array(), PARAM_INT);
+$OUTPUT->header();
 
-		foreach($todo as $groupid){
-			
-			$group = groups_get_group($groupid);
+echo $OUTPUT->box($OUTPUT->notification(get_string('actionnotification', 'block_group_network', $action)));
 
-			$record->groupid = $groupid;
-			$record->platformid = $platformid;
- 			$DB->insert_record('block_group_network', $record);
+if (!empty($output)) {
+    echo $OUTPUT->box($output);
+}
 
-			$groupmembers = $DB->get_records('groups_members', array('groupid' => $groupid));
-
-			foreach($groupmembers as $student){
-			    $studentid = $student->userid;
-			    $uid->userid = $studentid;
-			    $uid->fieldid = $fieldid;
-			    $uid->data => 1; // we enforce the 1 because the relative field is a checkbox that needs to be checked
-			    $DB->insert_record('user_info_data', $uid);
-				echo $OUTPUT->box(get_string('usergranted', 'block_group_network', fullname($user)));
-			}
-			echo $OUTPUT->box(get_string('groupcomplete', 'block_group_network', $group->name);
-		  }
-	      break;
-
-	case 4:
-
-		$todo = optional_param_array('net', array(), PARAM_INT);
-
-		foreach($todo as $groupid){
-
-			$group = groups_get_group($groupid);
-
-			$groupmembers = $DB->get_records('groups_members', array('groupid' => $groupid));
-
-			foreach($groupmembers as $student){
-				$studentid = $student->userid;
-				$user = $DB->get_record('user', array('id' => $studentid));
-				$DB->delete_records('user_info_data', array('userid' => $studentid, 'fieldid' => $fieldid));
-				echo $OUTPUT->box(get_string('userrevoked', 'block_group_network', fullname($user));			
-		  	}
-
-			$DB->delete_records('block_group_network', array('groupid' => $groupid, 'platformid' => $platformid));
-
-			echo $OUTPUT->box(get_string('groupcomplete', 'block_group_network', $group->name);			   
-		}
-		break;
-
-//	NOT TO HAPPEN => Wrong id
-	default:
-	     print_error('erroraction', 'block_group_network');
-    }
-
-    echo '<div class="butarray" align="center">';
-    echo $OUTPUT->single_button(new moodle_url('/course/view.php',array('id' => $courseid)),get_string('backtocourse','block_group_network'));
-    echo '</div>';
-    $OUTPUT->footer($COURSE);
-
-?>
+echo '<div class="butarray" align="center">';
+echo $OUTPUT->single_button(new moodle_url('/course/view.php',array('id' => $courseid)),get_string('backtocourse','block_group_network'));
+echo '</div>';
+$OUTPUT->footer($COURSE);

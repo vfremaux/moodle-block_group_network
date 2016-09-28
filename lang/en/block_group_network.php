@@ -1,4 +1,18 @@
 <?php
+// This file is part of Moodle - http://moodle.org/
+//
+// Moodle is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 $string['group_network:manageaccess'] = 'Can manage individual access of user to network';
 $string['group_network:addinstance'] = 'Can add an instance';
@@ -23,8 +37,9 @@ $string['enabled'] = 'Authorized people ';
 $string['erroraction'] = 'Unexpected error';
 $string['errorpeearnum'] = 'Error in number of peers';
 $string['globalnetworking'] = 'WARNING : Permissions to roam are given globally to users. The effect of attributing accesses is not limitated to this course.';
-$string['group_netwizard'] = 'Give Network Access to groups';
+$string['group_netwizard'] = 'Give access to groups';
 $string['group_network'] = 'Network Student Access';
+$string['group_network_settings'] = 'Student Network Access Settings';
 $string['groupcomplete'] = 'Group \'$a\' has been processed.';
 $string['listallplatforms'] = 'List all platforms';
 $string['netrole'] = 'Giving network access to students';
@@ -35,7 +50,7 @@ $string['noplatform'] = 'No other platform in the network';
 $string['partial'] = 'Group partially authorized ';
 $string['process'] = 'Save';
 $string['single_full'] = 'Network User Assignation';
-$string['single_netwizard'] = 'Give Network Access to individual students';
+$string['single_netwizard'] = 'Give access to singles';
 $string['single_short'] = 'Give Network Privilegies - List Mode';
 $string['usergranted'] = 'User \'$a\' has been granted networking privilegies.';
 $string['userrevoked'] = 'User : \'$a\' has had his networking privilegies revoked.';
