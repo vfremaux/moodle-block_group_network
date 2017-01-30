@@ -25,10 +25,10 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version   = 2013041600;        // The current plugin version (Date: YYYYMMDDXX)
-$plugin->requires  = 2011112900;        // Requires this Moodle version
-$plugin->component = 'block_group_network'; // Full name of the plugin (used for diagnostics)
-$plugin->maturity = MATURITY_ALPHA;
+$plugin->version   = 2013041600;        // The current plugin version (Date: YYYYMMDDXX).
+$plugin->requires  = 2014050800;        // Requires this Moodle version.
+$plugin->component = 'block_group_network'; // Full name of the plugin (used for diagnostics).
+$plugin->maturity = MATURITY_BETA;
 $plugin->release = '2.7.0 (build 2013041600)';
 $plugin->dependencies = array('block_user_mnet_hosts' => 'ALL VERSIONS');
 
