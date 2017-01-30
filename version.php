@@ -15,22 +15,23 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Version details
+ * Version details.
  *
- * @package    block
- * @subpackage group_network
- * @copyright  1999 onwards Martin Dougiamas (http://dougiamas.com)
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package     block_group_network
+ * @category    blocks
+ * @author      Valery Fremaux <valery.fremaux@gmail.com>
+ * @copyright   2008 onwards Valery Fremaux (http://www.mylearningfactory.com)
+ * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version   = 2013041600;        // The current plugin version (Date: YYYYMMDDXX).
-$plugin->requires  = 2014050800;        // Requires this Moodle version.
-$plugin->component = 'block_group_network'; // Full name of the plugin (used for diagnostics).
-$plugin->maturity = MATURITY_BETA;
-$plugin->release = '2.7.0 (build 2013041600)';
+$plugin->version   = 2013041600;        // The current plugin version (Date: YYYYMMDDXX)
+$plugin->requires  = 2014110400;        // Requires this Moodle version
+$plugin->component = 'block_group_network'; // Full name of the plugin (used for diagnostics)
+$plugin->maturity = MATURITY_ALPHA;
+$plugin->release = '2.8.0 (build 2013041600)';
 $plugin->dependencies = array('block_user_mnet_hosts' => 'ALL VERSIONS');
 
 // Non moodle attributes.
-$plugin->codeincrement = '2.7.0000';
+$plugin->codeincrement = '2.8.0000';
