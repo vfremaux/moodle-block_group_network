@@ -28,7 +28,7 @@ require('../../config.php');
 require_once($CFG->dirroot.'/blocks/group_network/single_form.php');
 require_once($CFG->dirroot.'/blocks/group_network/lib.php');
 
-$courseid = required_param('courseid', PARAM_INT); // needed for return
+$courseid = required_param('courseid', PARAM_INT); // Needed for return.
 $platformid = optional_param('platformid', 0, PARAM_INT);
 $blockid = required_param('blockid', PARAM_INT);
 
@@ -74,7 +74,8 @@ echo $OUTPUT->heading(get_string('netrole', 'block_group_network'));
 if (empty($users)) {
     echo $OUTPUT->box($OUTPUT->notification(get_string('nousers', 'block_gorup_network')));
     echo '<div class="returntocourse" align="center"><p><hr/>';
-    echo $OUTPUT->single_button(new moodle_url('/course/view.php', array('id' => $courseid)), get_string('backtocourse','block_group_network'), 'get');
+    $buttonurl = new moodle_url('/course/view.php', array('id' => $courseid));
+    echo $OUTPUT->single_button($buttonurl, get_string('backtocourse', 'block_group_network'), 'get');
     echo '</p></div>';
     echo $OUTPUT->footer();
     die;
@@ -89,12 +90,13 @@ if ($platformid) {
     $custom['mnethostid'] = $platformid;
     $custom['blockid'] = $blockid;
     $custom['users'] = $users;
-    $singleurl = new moodle_url('/blocks/group_network/single.php', array('blockid' => $blockid, 'courseid' => $COURSE->id));
+    $params = array('blockid' => $blockid, 'courseid' => $COURSE->id);
+    $singleurl = new moodle_url('/blocks/group_network/single.php', $params);
     $form = new block_group_network_single_form($singleurl, $custom);
 
     if ($form->is_cancelled()) {
         redirect(new moodle_url('/course/view.php', array('id' => $courseid)));
-    } elseif ($data = $form->get_data()) {
+    } else if ($data = $form->get_data()) {
         access_process_data_single($data, $instance);
     }
 
@@ -110,6 +112,7 @@ if ($platformid) {
 }
 
 echo '<div class="returntocourse" align="center"><p><hr/>';
-echo $OUTPUT->single_button(new moodle_url('/course/view.php', array('id' => $courseid)), get_string('backtocourse','block_group_network'), 'get');
+$params = new moodle_url('/course/view.php', array('id' => $courseid));
+echo $OUTPUT->single_button($params, get_string('backtocourse', 'block_group_network'), 'get');
 echo '</p></div>';
 echo $OUTPUT->footer($course);

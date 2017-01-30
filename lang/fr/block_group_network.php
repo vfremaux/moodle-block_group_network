@@ -18,7 +18,6 @@ $string['group_network:manageaccess'] = 'Peut gérer l\'accès réseau des parti
 $string['group_network:addinstance'] = 'Peut ajouter une instance';
 $string['group_network:myaddinstance'] = 'Peut ajouter une instance à ma page';
 
-$string['accessinstructions'] = 'Pour modifier les accès, sélectionnez les personnes dans la liste appropriée et cliquez sur le bouton d\'ordre correpondant (situé sous la liste).<br/><br/>Attention: plusieurs enseignants peuvent avoir le contrôle d\'accès des mêmes élèves à travers leurs cours. Avant de retirer un accès à un élève, assurez vous qu\'aucune autre raison de lui laisser cet accès n\'existe.';
 $string['accessnetworknotinitialized'] = 'Les fonctions de contrôle d\'accès aux membres du réseau ne sont pas initialisées pour cette plate-forme.';
 $string['authorized'] = 'Autorisé';
 $string['unauthorized'] = 'Non autorisé';
@@ -53,3 +52,10 @@ $string['single_netwizard'] = 'Donnez des accès réseau à des élèves';
 $string['single_short'] = 'Droits de circulation réseau - Mode liste';
 $string['singledel_netwizard'] = 'Retirer les droits réseau aux élèves.';
 $string['wheretoopen'] = 'Hôte à autoriser : ';
+
+$string['accessinstructions'] = '
+Pour modifier les accès, sélectionnez les personnes dans la liste appropriée et cliquez sur le bouton d\'ordre
+correpondant (situé sous la liste).<br/><br/>Attention: plusieurs enseignants peuvent avoir le contrôle d\'accès
+des mêmes élèves à travers leurs cours. Avant de retirer un accès à un élève, assurez vous qu\'aucune autre raison
+de lui laisser cet accès n\'existe.
+';

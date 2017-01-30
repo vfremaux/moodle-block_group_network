@@ -29,11 +29,11 @@ use block_group_network\controller\net_controller;
 require('../../config.php');
 require_once($CFG->dirroot.'/blocks/group_network/single_form.php');
 
-$userid         = required_param('userid', PARAM_INT); // needed for user tabs
-$courseid       = required_param('courseid', PARAM_INT); // needed for user tabs
-$platformid     = required_param('platformid', PARAM_INT); //this is not the real platform id, it the the field id corresponding to it
-$actionid       = required_param('actionid', PARAM_INT); //actionid : 1 for add    //  2 for remove //  3 for group add //  4 for group remove
-$fieldid        = required_param('fieldid', PARAM_INT); //id of the custom profile field
+$userid         = required_param('userid', PARAM_INT); // Needed for user tabs.
+$courseid       = required_param('courseid', PARAM_INT); // Needed for user tabs.
+$platformid     = required_param('platformid', PARAM_INT); // The the field id corresponding to it.
+$actionid       = required_param('actionid', PARAM_INT);
+$fieldid        = required_param('fieldid', PARAM_INT); // Id of the custom profile field.
 
 if (! $course = $DB->get_record('course', array('id' => $courseid)) ) {
     print_error('invalidcourseid');
@@ -67,7 +67,7 @@ if ($action) {
     $output = $controller->process($action, '', array('platformid' => $platformid));
 }
 
-//Here we are going to switch on the actionid, to do the required actions.
+// Here we are going to switch on the actionid, to do the required actions.
 
 $OUTPUT->header();
 
@@ -78,6 +78,7 @@ if (!empty($output)) {
 }
 
 echo '<div class="butarray" align="center">';
-echo $OUTPUT->single_button(new moodle_url('/course/view.php',array('id' => $courseid)),get_string('backtocourse','block_group_network'));
+$buttonurl = new moodle_url('/course/view.php', array('id' => $courseid));
+echo $OUTPUT->single_button($buttonurl, get_string('backtocourse', 'block_group_network'));
 echo '</div>';
 $OUTPUT->footer($COURSE);

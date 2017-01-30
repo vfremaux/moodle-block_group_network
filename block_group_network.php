@@ -14,8 +14,6 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * Declare the group_network block
  * The purpose of this block is to give a wizard to the teacher to
@@ -32,42 +30,43 @@ defined('MOODLE_INTERNAL') || die();
  * @author Edouard Poncelet (edouard.poncelet@gmail.com)
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL
  */
+defined('MOODLE_INTERNAL') || die();
+
 class block_group_network extends block_list {
 
-    function init() {
+    public function init() {
         $this->title = get_string('group_network','block_group_network') ;
     }
 
-/**
- * This block is not supposed to be configurable. It automatically provides the teacher with the two options.
- */
-    function has_config() {
+    /**
+     * This block is not supposed to be configurable. It automatically provides the teacher with the two options.
+     */
+    public function has_config() {
         return false;
     }
 
-/**
- * This block is VERY specific. It can only be placed in a course by an editing teacher.
- */
-    function applicable_formats() {
+    /**
+     * This block is VERY specific. It can only be placed in a course by an editing teacher.
+     */
+    public function applicable_formats() {
            return array('admin' => true, 'course-view' => true);
     }
 
-/**
- * This block will display two links, wich will trigger the single or group wizards.
- */
-
-    function get_content() {
-        global $CFG, $COURSE, $USER, $DB, $OUTPUT;
+    /**
+     * This block will display two links, wich will trigger the single or group wizards.
+     */
+    public function get_content() {
+        global $COURSE, $USER, $DB, $OUTPUT;
 
         $context = context_course::instance($COURSE->id);
 
-        // only for logged in users!
+        // Only for logged in users!
         if (!isloggedin() || isguestuser()) {
             return false;
         }
 
         if (!is_enabled_auth('mnet')) {
-            // no need to query anything remote related
+            // No need to query anything remote related.
             debugging('mnet authentication plugin is not enabled', DEBUG_ALL);
             return '';
         }
@@ -93,14 +92,13 @@ class block_group_network extends block_list {
             $this->content->icons = array();
             $this->content->footer = '';
 
-            $contextid = $context->id;
-            $userid = $USER->id;
             $courseid = $COURSE->id;
 
             // Creating the first link for "single" user networking.
             $singlewizard = get_string('single_netwizard', 'block_group_network');
             $icon  = '<img src="'.$OUTPUT->pix_url('/t/edit').'" class="icon" />';
-            $singleurl = new moodle_url('/blocks/group_network/single.php', array('courseid' => $courseid, 'blockid' => $this->instance->id));
+            $params = array('courseid' => $courseid, 'blockid' => $this->instance->id);
+            $singleurl = new moodle_url('/blocks/group_network/single.php', $params);
             $this->content->items[] = '<a href="'.$singleurl.'">'.$singlewizard.'</a><br/>';
             $this->content->icons[] = $icon;
 
@@ -109,7 +107,8 @@ class block_group_network extends block_list {
             if (!empty($groups)) {
                 $groupwizard = get_string('group_netwizard', 'block_group_network');
                 $icon  = '<img src="'.$OUTPUT->pix_url('/i/users').'" class="icon" />';
-                $groupurl = new moodle_url('/blocks/group_network/group.php', array('courseid' => $courseid, 'blockid' => $this->instance->id));
+                $params = array('courseid' => $courseid, 'blockid' => $this->instance->id);
+                $groupurl = new moodle_url('/blocks/group_network/group.php', $params);
                 $this->content->items[] = '<a href="'.$groupurl.'">'.$groupwizard.'</a><br/>';
                 $this->content->icons[] = $icon;
             }

@@ -1,14 +1,28 @@
 <?php
+// This file is part of Moodle - http://moodle.org/
+//
+// Moodle is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
  * This form is only accessible by an editing teacher and will display the enroled user in the course.
  * The teacher will then be able to give networking access to selected users by changing a checkbox status
  * that is hidden in their profile
  *
- * @package block-groupnet
- * @category block
- * @author Edouard Poncelet (edouard.poncelet@gmail.com)
- * @copyright valeisti (http://www.valeisti.fr)
+ * @package     block_groupnetwork
+ * @category    block
+ * @author      Edouard Poncelet (edouard.poncelet@gmail.com)
+ * @copyright   valery.fremaux (http://www.mylearningfactory.com)
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL
  */
 
@@ -16,12 +30,12 @@ require_once ($CFG->libdir.'/formslib.php');
 
 class block_group_network_single_form extends moodleform {
 
-    function definition() {
+    public function definition() {
         global $CFG, $COURSE, $DB;
  
         $mform =& $this->_form;
 
-        // calculating platform field
+        // Calculating platform field.
 
         $mnethost = $DB->get_record('mnet_host', array('id' => $this->_customdata['mnethostid']));
 
@@ -40,7 +54,7 @@ class block_group_network_single_form extends moodleform {
         $mform->addElement('hidden', 'courseid', $COURSE->id);
         $mform->setType('courseid', PARAM_INT);
 
-        // We select every student in the course and will compare them to the network possibilities
+        // We select every student in the course and will compare them to the network possibilities.
 
         $context = context_block::instance($this->_customdata['blockid']);
         $coursecontext = context_course::instance($COURSE->id);
@@ -62,11 +76,30 @@ class block_group_network_single_form extends moodleform {
                 }
             }
 
-            $mform->addElement('html', '<center><table width="400" class="accessformlabels"><tr><td align="center"><b>'.get_string('enabled', 'block_group_network'). '</b></td><td align="center"><b>'.get_string('disabled', 'block_group_network').'</b></td></tr></table></center>');
+            $elementhtml = '<center>';
+            $elementhtml .= '<table width="400" class="accessformlabels">';
+            $elementhtml .= '<tr>';
+            $elementhtml .= '<td align="center">';
+            $elementhtml .= '<b>'.get_string('enabled', 'block_group_network'). '</b>';
+            $elementhtml .= '</td>';
+            $elementhtml .= '<td align="center">';
+            $elementhtml .= '<b>'.get_string('disabled', 'block_group_network').'</b>';
+            $elementhtml .= '</td>';
+            $elementhtml .= '</tr>'
+            $elementhtml .= '</table>';
+            $elementhtml .= '</center>';
+
+            $mform->addElement('html', $elementhtml);
 
             $group1 = array();
-            $group1[0] = & $mform->createElement('select', 'authorized', get_string('authorized', 'block_group_network'), $authorisedusers, array('size' => 10, 'style' => 'width:200px'));
-            $group1[1] = & $mform->createElement('select', 'unauthorized', get_string('unauthorized', 'block_group_network'), $unauthorisedusers, array('size' => 10, 'style' => 'width:200px'));
+            $label = get_string('authorized', 'block_group_network');
+            $attrs = array('size' => 10, 'style' => 'width:200px');
+            $group1[0] = & $mform->createElement('select', 'authorized', $label, $authorisedusers, $attrs);
+
+            $label = get_string('unauthorized', 'block_group_network');
+            $attrs = array('size' => 10, 'style' => 'width:200px');
+            $group1[1] = & $mform->createElement('select', 'unauthorized', $label, $unauthorisedusers, $attrs);
+
             $group1[0]->setMultiple(true);
             $group1[1]->setMultiple(true);
             $mform->addGroup($group1, 'accessess', get_string('accessinstructions', 'block_group_network'), '', false);
@@ -81,11 +114,5 @@ class block_group_network_single_form extends moodleform {
             $mform->addElement('static', 'static1', get_string('nostudents', 'block_group_network'));
         }
 
-    }
-
-    function validation($data, $files = array()) {
-        $errors = array();
-
-        return $errors;
     }
 }

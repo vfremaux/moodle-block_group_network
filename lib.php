@@ -14,15 +14,14 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
- * @package block_group_network
- * @category blocks
- * @author Edouard Poncelet (edouard.poncelet@gmail.com)
- * @copyright valeisti (http://www.valeisti.fr)
- * @license http://www.gnu.org/copyleft/gpl.html GNU GPL
+ * @package     block_group_network
+ * @category    blocks
+ * @author      Edouard Poncelet (edouard.poncelet@gmail.com)
+ * @copyright   valery.fremaux (http://www.mylearningfactory.com)
+ * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL
  */
+defined('MOODLE_INTERNAL') || die();
 
 define('GROUP_NETWORK_ENABLE_MEMBERS', 2);
 define('GROUP_NETWORK_DISABLE_MEMBERS', 1);
@@ -37,7 +36,8 @@ function access_process_data_single($data) {
             $rec->fieldid = $data->fieldid;
             $rec->data = 1;
 
-            if (!$oldrec = $DB->get_record('user_info_data', array('userid' => $toenable, 'fieldid' => $data->fieldid))) {
+            $params = array('userid' => $toenable, 'fieldid' => $data->fieldid);
+            if (!$oldrec = $DB->get_record('user_info_data', $params)) {
                 $DB->insert_record('user_info_data', $rec);
             } else {
                 $rec->id = $oldrec->id;
@@ -47,7 +47,7 @@ function access_process_data_single($data) {
     }
 
     if (!empty($data->disableusers) && !empty($data->authorized)) {
-        foreach($data->authorized as $todisable) {
+        foreach ($data->authorized as $todisable) {
             $DB->delete_records('user_info_data', array('userid' => $todisable, 'fieldid' => $data->fieldid));
         }
     }
@@ -60,14 +60,14 @@ function access_process_data_group($data, &$theBlock) {
 
     $groupstates = preg_grep('/^group/', array_keys((array)$data));
 
-    foreach($groupstates as $groupkey) {
+    foreach ($groupstates as $groupkey) {
 
         $groupid = str_replace('group', '', $groupkey);
         $members = groups_get_members($groupid, 'u.id, firstname');
 
         if ($data->$groupkey == GROUP_NETWORK_ENABLE_MEMBERS) {
 
-            foreach($members as $member) {
+            foreach ($members as $member) {
                 if (has_capability('block/group_network:manageaccess', $context)) {
                     continue;
                 }
@@ -79,7 +79,7 @@ function access_process_data_group($data, &$theBlock) {
                 $DB->insert_record('user_info_data', $rec);
             }
 
-        } elseif ($data->$groupkey == GROUP_NETWORK_DISABLE_MEMBERS) {
+        } else if ($data->$groupkey == GROUP_NETWORK_DISABLE_MEMBERS) {
             foreach ($members as $member) {
                 $DB->delete_records('user_info_data', array('userid' => $member->id, 'fieldid' => $data->fieldid));
             }

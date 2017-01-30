@@ -14,25 +14,25 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * This form is only accessible by an editing teacher and will display the enroled user in the course.
  * The teacher will then be able to give networking access to selected users by changing a checkbox status
  * that is hidden in their profile
  *
- * @package block_group_network
- * @category blocks
- * @author Edouard Poncelet (edouard.poncelet@gmail.com)
- * @copyright valeisti (http://www.valeisti.fr)
- * @license http://www.gnu.org/copyleft/gpl.html GNU GPL
+ * @package     block_group_network
+ * @category    blocks
+ * @author      Edouard Poncelet (edouard.poncelet@gmail.com)
+ * @copyright   Valery Fremaux (http://www.mylearningfactory.com)
+ * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL
  */
+defined('MOODLE_INTERNAL') || die();
+
 require_once($CFG->libdir.'/formslib.php');
 require_once($CFG->dirroot.'/blocks/user_mnet_hosts/xlib.php');
 
 class block_group_network_group_form extends moodleform {
 
-    function definition() {
+    public function definition() {
         global $CFG, $COURSE, $USER, $DB;
 
         $mform =& $this->_form;
@@ -114,9 +114,12 @@ class block_group_network_group_form extends moodleform {
             $grouplabel = $grouppicture.' '.$group->name.'<br/>'.$groupmemberlist;
 
             $radioarr = array();
-            $radioarr[] = & $mform->createElement('radio', 'group'.$group->id, '', get_string('disableall', 'block_group_network'), GROUP_NETWORK_DISABLE_MEMBERS, array());
-            $radioarr[] = & $mform->createElement('radio', 'group'.$group->id, '', get_string('partial', 'block_group_network'), 0, array('disabled' => 1));
-            $radioarr[] = & $mform->createElement('radio', 'group'.$group->id, '', get_string('enableall', 'block_group_network'), GROUP_NETWORK_ENABLE_MEMBERS, array());
+            $label = get_string('disableall', 'block_group_network');
+            $radioarr[] = & $mform->createElement('radio', 'group'.$group->id, '', $label, GROUP_NETWORK_DISABLE_MEMBERS, array());
+            $label = get_string('partial', 'block_group_network');
+            $radioarr[] = & $mform->createElement('radio', 'group'.$group->id, '', $label, 0, array('disabled' => 1));
+            $label = get_string('enableall', 'block_group_network');
+            $radioarr[] = & $mform->createElement('radio', 'group'.$group->id, '', $label, GROUP_NETWORK_ENABLE_MEMBERS, array());
             $mform->setDefault('group'.$group->id, $groupdefault);
             $mform->addGroup($radioarr, 'groupaccess'.$group->id, $grouplabel, array('&nbsp;&nbsp;&nbsp;'), false);
         }
@@ -129,15 +132,10 @@ class block_group_network_group_form extends moodleform {
         $mform->addGroup($group2, 'submits', '', array('&nbsp;&nbsp;'), false);
     }
 
-    function validation($data, $files = null) {
-        $errors = array();
-        return $errors;
-    }
-
     /**
      * Here we can check the available groups access state
      */
-    function set_data($defaults) {
+    public function set_data($defaults) {
         global $DB;
 
         $mnethost = $DB->get_record('mnet_host', array('id' => $this->_customdata['mnethostid']));
