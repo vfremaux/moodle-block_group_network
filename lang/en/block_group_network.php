@@ -18,7 +18,6 @@ $string['group_network:manageaccess'] = 'Can manage individual access of user to
 $string['group_network:addinstance'] = 'Can add an instance';
 $string['group_network:myaddinstance'] = 'Can add instance to my page';
 
-$string['accessinstructions'] = 'To change permissions, make a selection into the appropriate list and cliwk on the command button beneath the list.<br/><br/>Take care many teachers can have ocontrol of the same users through their own courses. When removing acces to a student, be sure there is no another reason to let him through.';
 $string['accessnetworknotinitialized'] = 'Network access control features are not correctly configured on this platform.';
 $string['actionnotification'] = 'Please wait while your action : <i>$a</i> is being perfomed. This may take some time.';
 $string['authorized'] = 'Authorized';
@@ -55,3 +54,9 @@ $string['single_short'] = 'Give Network Privilegies - List Mode';
 $string['usergranted'] = 'User \'$a\' has been granted networking privilegies.';
 $string['userrevoked'] = 'User : \'$a\' has had his networking privilegies revoked.';
 $string['wheretoopen'] = 'Host to open access to: ';
+
+$string['accessinstructions'] = '
+To change permissions, make a selection into the appropriate list and cliwk on the command button
+beneath the list.<br/><br/>Take care many teachers can have ocontrol of the same users through their
+own courses. When removing acces to a student, be sure there is no another reason to let him through.
+';

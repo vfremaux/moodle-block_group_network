@@ -14,8 +14,6 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * @package block_group_network
  * @category blocks
@@ -23,6 +21,7 @@ defined('MOODLE_INTERNAL') || die();
  * @copyright valeisti (http://www.valeisti.fr)
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL
  */
+defined('MOODLE_INTERNAL') || die();
 
 // Warning that the changes arent localized to the course.
 echo $OUTPUT->box(get_string('globalnetworking', 'block_group_network'));
@@ -71,22 +70,26 @@ $sql = "
     ORDER BY
         h.name ASC";
 
-$id_providers       = array();
-$service_providers  = array();
+$id_providers = array();
+$service_providers = array();
 if ($resultset = $DB->get_records_sql($sql, array($CFG->mnet_localhost_id))) {
-    foreach($resultset as $hostservice) {
+    foreach ($resultset as $hostservice) {
         if (!empty($hostservice->idppublish) && !empty($hostservice->spsubscribe)) {
-            $service_providers[$hostservice->id] = array('id' => $hostservice->id, 'name' => $hostservice->hostname, 'wwwroot' => $hostservice->wwwroot);
+            $service_providers[$hostservice->id] = array('id' => $hostservice->id,
+                                                         'name' => $hostservice->hostname,
+                                                         'wwwroot' => $hostservice->wwwroot);
             $hostlist[$hostservice->id] = $hostservice->hostname;
         }
         if (!empty($hostservice->idpsubscribe) && !empty($hostservice->sppublish)) {
-            $id_providers[]= array('id' => $hostservice->id, 'name' => $hostservice->hostname, 'wwwroot' => $hostservice->wwwroot);
+            $id_providers[]= array('id' => $hostservice->id,
+                                   'name' => $hostservice->hostname,
+                                   'wwwroot' => $hostservice->wwwroot);
         }
     }
 }
 
 // Preselect a unique platform.
-if ($service_providers && count($service_providers) == 1) {
+if ($service_providers && (count($service_providers) == 1)) {
     $hostids = array_keys($service_providers);
     $platformid = $hostids[0];
 }
@@ -97,12 +100,14 @@ if ($service_providers && count($service_providers) == 1) {
 if (!empty($service_providers)) {
     echo '<div class="group-network-targetchoice" align="center">';
     echo get_string('wheretoopen', 'block_group_network');
-    echo $OUTPUT->single_select(new moodle_url('/blocks/group_network/'.$choicemode.'.php', array('courseid' => $courseid, 'blockid' => $blockid)), 'platformid', $hostlist, $platformid);
+    $selecturl = new moodle_url('/blocks/group_network/'.$choicemode.'.php', array('courseid' => $courseid, 'blockid' => $blockid));
+    echo $OUTPUT->single_select($selecturl, 'platformid', $hostlist, $platformid);
     echo '</div>';
 } else {
     echo $OUTPUT->notification(get_string('noplatform', 'block_group_network'));
     echo '<div class="group-network-targetchoice" align="center">';
-    echo $OUTPUT->single_button(new moodle_url('/course/view.php', array('id' => $courseid)), get_string('backtocourse', 'block_group_network'));
+    $buttonurl = new moodle_url('/course/view.php', array('id' => $courseid));
+    echo $OUTPUT->single_button($buttonurl, get_string('backtocourse', 'block_group_network'));
     echo '</div>';
     echo $OUTPUT->footer($course);
     die;

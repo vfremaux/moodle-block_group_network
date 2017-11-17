@@ -14,20 +14,19 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-namespace block_group_network\controller;
-
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * This is the processing part of the network assign
  * This page is called by the forms defined in single_class.php
  *
- * @package block_group_network
- * @category block
- * @author Edouard Poncelet (edouard.poncelet@gmail.com)
- * @copyright valeisti (http://www.valeisti.fr)
- * @license http://www.gnu.org/copyleft/gpl.html GNU GPL
+ * @package     block_group_network
+ * @category    block
+ * @author      Edouard Poncelet (edouard.poncelet@gmail.com)
+ * @copyright   valery.fremaux (http://www.mylearningfactory.com)
+ * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL
  */
+namespace block_group_network\controller;
+
+defined('MOODLE_INTERNAL') || die();
 
 class net_controller {
 
@@ -38,29 +37,29 @@ class net_controller {
 
         switch($action) {
 
-            //    ADD CASE
+            // ADD CASE.
             case 1:
                 $todo = optional_param_array('local', '', PARAM_INT);
-                $fieldid = required_param('fieldid', PARAM_INT); //id of the custom profile field
+                $fieldid = required_param('fieldid', PARAM_INT); // Id of the custom profile field.
 
-                //Now the action
+                // Now the action.
                 foreach ($todo as $studentid) {
                     $user = $DB->get_record('user', array('id' => $studentid));
                     $uid = new \Stdclass();
                     $uid->userid = $studentid;
                     $uid->fieldid = $fieldid;
-                    $uid->data =  1; // we enforce the 1 because the relative field is a checkbox that needs to be checked
+                    $uid->data =  1; // We enforce the 1 because the relative field is a checkbox that needs to be checked.
                     $DB->insert_record('user_info_data', $uid);
                     $str .= $OUTPUT->box(get_string('usergranted', 'block_group_network', fullname($user)));
                 }
                 break;
 
-            //    REMOVE CASE
+            // REMOVE CASE.
             case 2:
                 $todo = optional_param_array('net', array(), PARAM_INT);
-                $fieldid = required_param('fieldid', PARAM_INT); //id of the custom profile field
+                $fieldid = required_param('fieldid', PARAM_INT); // Id of the custom profile field.
 
-                //Now the action
+                // Now the action.
                 foreach ($todo as $studentid) {
                     $user = $DB->get_record('user', array('id' => $studentid));
                     $DB->delete_records('user_info_data', array('userid' => $studentid, 'fieldid' => $fieldid));
@@ -70,8 +69,8 @@ class net_controller {
 
             case 3:
                 $todo = optional_param_array('local', array(), PARAM_INT);
-                $fieldid = required_param('fieldid', PARAM_INT); //id of the custom profile field
-                $groupid = required_param('groupid', PARAM_INT); //id of the custom profile field
+                $fieldid = required_param('fieldid', PARAM_INT); // Id of the custom profile field.
+                $groupid = required_param('groupid', PARAM_INT); // Id of the custom profile field.
 
                 foreach ($todo as $groupid) {
 
@@ -89,7 +88,7 @@ class net_controller {
                         $uid = new \StdClass();
                         $uid->userid = $studentid;
                         $uid->fieldid = $fieldid;
-                        $uid->data = 1; // we enforce the 1 because the relative field is a checkbox that needs to be checked
+                        $uid->data = 1; // We enforce the 1 because the relative field is a checkbox that needs to be checked.
                         $DB->insert_record('user_info_data', $uid);
                         $str .= $OUTPUT->box(get_string('usergranted', 'block_group_network', fullname($user)));
                     }
@@ -100,8 +99,8 @@ class net_controller {
             case 4:
 
                 $todo = optional_param_array('net', array(), PARAM_INT);
-                $fieldid = required_param('fieldid', PARAM_INT); //id of the custom profile field
-                $groupid = required_param('groupid', PARAM_INT); //id of the custom profile field
+                $fieldid = required_param('fieldid', PARAM_INT); // Id of the custom profile field.
+                $groupid = required_param('groupid', PARAM_INT); // Id of the custom profile field.
 
                 foreach ($todo as $groupid) {
 
@@ -122,11 +121,11 @@ class net_controller {
                 }
                 break;
 
-            //    NOT TO HAPPEN => Wrong id
+            // NOT TO HAPPEN => Wrong id.
             default:
                  print_error('erroraction', 'block_group_network');
         }
 
         return $str;
-   }
+    }
 }

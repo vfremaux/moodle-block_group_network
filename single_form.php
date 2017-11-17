@@ -14,8 +14,6 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * This form is only accessible by an editing teacher and will display the enroled user in the course.
  * The teacher will then be able to give networking access to selected users by changing a checkbox status
@@ -26,18 +24,19 @@ defined('MOODLE_INTERNAL') || die();
  * @author Edouard Poncelet (edouard.poncelet@gmail.com)
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL
  */
+defined('MOODLE_INTERNAL') || die();
 
 require_once ($CFG->libdir.'/formslib.php');
 require_once($CFG->dirroot.'/blocks/user_mnet_hosts/xlib.php');
 
 class block_group_network_single_form extends moodleform {
 
-    function definition() {
+    public function definition() {
         global $CFG, $COURSE, $DB;
  
         $mform =& $this->_form;
 
-        // calculating platform field.
+        // Calculating platform field.
 
         $mnethost = $DB->get_record('mnet_host', array('id' => $this->_customdata['mnethostid']));
 
@@ -56,7 +55,7 @@ class block_group_network_single_form extends moodleform {
         $mform->addElement('hidden', 'courseid', $COURSE->id);
         $mform->setType('courseid', PARAM_INT);
 
-        // We select every student in the course and will compare them to the network possibilities
+        // We select every student in the course and will compare them to the network possibilities.
 
         $context = context_block::instance($this->_customdata['blockid']);
         $coursecontext = context_course::instance($COURSE->id);
@@ -78,11 +77,30 @@ class block_group_network_single_form extends moodleform {
                 }
             }
 
-            $mform->addElement('html', '<center><table width="400" class="accessformlabels"><tr><td align="center"><b>'.get_string('enabled', 'block_group_network'). '</b></td><td align="center"><b>'.get_string('disabled', 'block_group_network').'</b></td></tr></table></center>');
+            $html = '<center>';
+            $html .= '<table width="400" class="accessformlabels">';
+            $html .= '<tr>';
+            $html .= '<td align="center">';
+            $html .= '<b>'.get_string('enabled', 'block_group_network'). '</b>';
+            $html .= '</td>';
+            $html .= '<td align="center">';
+            $html .= '<b>'.get_string('disabled', 'block_group_network').'</b>';
+            $html .= '</td>';
+            $html .= '</tr>';
+            $html .= '</table>';
+            $html .= '</center>';
+
+            $mform->addElement('html', $html);
 
             $group1 = array();
-            $group1[0] = & $mform->createElement('select', 'authorized', get_string('authorized', 'block_group_network'), $authorisedusers, array('size' => 10, 'style' => 'width:200px'));
-            $group1[1] = & $mform->createElement('select', 'unauthorized', get_string('unauthorized', 'block_group_network'), $unauthorisedusers, array('size' => 10, 'style' => 'width:200px'));
+            $label = get_string('authorized', 'block_group_network');
+            $attrs = array('size' => 10, 'style' => 'width:200px');
+            $group1[0] = & $mform->createElement('select', 'authorized', $label, $authorisedusers, $attrs);
+
+            $label = get_string('unauthorized', 'block_group_network');
+            $attrs = array('size' => 10, 'style' => 'width:200px');
+            $group1[1] = & $mform->createElement('select', 'unauthorized', $label, $unauthorisedusers, $attrs);
+
             $group1[0]->setMultiple(true);
             $group1[1]->setMultiple(true);
             $mform->addGroup($group1, 'accessess', '', '&nbsp;&nbsp;', false);
@@ -96,11 +114,5 @@ class block_group_network_single_form extends moodleform {
         } else {
             $mform->addElement('static', 'static1', get_string('nostudents', 'block_group_network'));
         }
-    }
-
-    function validation($data, $files = array()) {
-        $errors = array();
-
-        return $errors;
     }
 }

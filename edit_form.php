@@ -14,8 +14,6 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * Form for editing profile block settings
  *
@@ -24,11 +22,11 @@ defined('MOODLE_INTERNAL') || die();
  * @author     Valery Fremaux <valery.fremaux@gmail.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+defined('MOODLE_INTERNAL') || die();
+
 class block_group_network_edit_form extends block_edit_form {
 
     protected function specific_definition($mform) {
-        global $CFG;
-
         $mform->addElement('header', 'configheader', get_string('group_network_settings', 'block_group_network'));
     }
 }

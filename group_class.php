@@ -1,46 +1,61 @@
-<?PHP
+<?php
+// This file is part of Moodle - http://moodle.org/
+//
+// Moodle is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
  * This form is only accessible by an editing teacher and will display the enroled user in the course.
  * The teacher will then be able to give networking access to selected users by changing a checkbox status
  * that is hidden in their profile
  *
- * @package block-groupnet
- * @category block
- * @author Edouard Poncelet (edouard.poncelet@gmail.com)
- * @copyright valeisti (http://www.valeisti.fr)
- * @license http://www.gnu.org/copyleft/gpl.html GNU GPL
+ * @package     block_groupnetwork
+ * @category    block
+ * @author      Edouard Poncelet (edouard.poncelet@gmail.com)
+ * @copyright   Valery Fremaux (http://www.mylearningfactory.com)
+ * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL
  */
+defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->libdir.'/formslib.php');
 
 class block_group_network_group_form extends moodleform {
  
-     var $mnethostid;
-     var $groups;
-     var $blockinstance;
+    public $mnethostid;
+    public $groups;
+    public $blockinstance;
 
-     function __construct($mnethostid, &$groups, &$theBlock) {
+    public function __construct($mnethostid, &$groups, &$theBlock) {
          $this->mnethostid = $mnethostid;
          $this->groups = $groups;
          $this->blockinstance = $theBlock;
          parent::__construct();
      }
  
-    function definition() {
+    public function definition() {
         global $CFG, $COURSE, $USER, $DB;
  
         $mform =& $this->_form;
-        
-        // calculating platform field
-        
+
+        // Calculating platform field.
+
         $mnethost = $DB->get_record('mnet_host', array('id' => $this->mnethostid));
-        
+
         preg_match('/http:\/\/(.*?)\./', $mnethost->wwwroot, $matches);
         $hostradical = str_replace('-', '', $matches[1]);
         $fieldname = 'access'.strtoupper($hostradical);
 
-        if(!($netfield = $DB->get_record('user_info_field', array('shortname' => $fieldname)))){
+        if (!($netfield = $DB->get_record('user_info_field', array('shortname' => $fieldname)))) {
             print_error('accessnetworknotinitialized', 'block_group_network');
         }
 
@@ -48,11 +63,11 @@ class block_group_network_group_form extends moodleform {
         $mform->addElement('hidden', 'courseid', $COURSE->id);
         $mform->addElement('hidden', 'blockid', $this->blockinstance->id);
 
-        // We select every student in the course and will compare them to the network possibilities
+        // We select every student in the course and will compare them to the network possibilities.
 
         $coursecontext = context_course::instance($COURSE->id);
         $context = context_block::instance($this->blockinstance->id);
-        
+
         $groupauthorisations = array();
         $authorisedgroups = array();
         $haveauthorisedgroups = array();
@@ -66,12 +81,14 @@ class block_group_network_group_form extends moodleform {
                 $groupauthorisations[$group->id] = 0;
                 $groupsize[$group->id] = 0;
             }
-            
+
             if ($members = groups_get_members($group->id)) {
                 foreach ($members as $amember) {
-                    if (has_capability('block/group_network:manageaccess', $context, $amember->id)) continue;
+                    if (has_capability('block/group_network:manageaccess', $context, $amember->id)) {
+                        continue;
+                    }
                     $tag = $DB->get_record('user_info_data', array('userid' => $amember->id, 'fieldid' => $netfield->id));
-                    if($tag && ($tag->data == 1)){
+                    if ($tag && ($tag->data == 1)) {
                         $groupauthorisations[$group->id]++;
                         $class = "authorized";
                     } else {
@@ -86,13 +103,13 @@ class block_group_network_group_form extends moodleform {
         $mform->addElement('header', '', get_string('networkauthorizations', 'block_group_network'));
         foreach ($this->groups as $group) {
             if ($groupauthorisations[$group->id] == $groupsize[$group->id]) {
-                // full authorized
+                // Full authorized.
                 $groupdefault = 2;
             } elseif ($groupauthorisations[$group->id] == 0) {
-                // full unauthorized
+                // Full unauthorized.
                 $groupdefault = 1;
             } else {
-                // some are unauthorized but not all
+                // Some are unauthorized but not all.
                 $groupdefault = 0;
             }
 
@@ -102,9 +119,12 @@ class block_group_network_group_form extends moodleform {
             $grouplabel = $grouppicture. ' ' . $group->name.'<br/>'.$groupmemberlist;
 
             $radioarr = array();
-            $radioarr[] = & $mform->createElement('radio', 'group'.$group->id, '', get_string('disableall', 'block_group_network'), GROUP_NETWORK_DISABLE_MEMBERS, array());
-            $radioarr[] = & $mform->createElement('radio', 'group'.$group->id, '', get_string('partial', 'block_group_network'), 0, array('disabled' => 1));
-            $radioarr[] = & $mform->createElement('radio', 'group'.$group->id, '', get_string('enableall', 'block_group_network'), GROUP_NETWORK_ENABLE_MEMBERS, array());
+            $label = get_string('disableall', 'block_group_network');
+            $radioarr[] = & $mform->createElement('radio', 'group'.$group->id, '', $label, GROUP_NETWORK_DISABLE_MEMBERS, array());
+            $label = get_string('partial', 'block_group_network');
+            $radioarr[] = & $mform->createElement('radio', 'group'.$group->id, '', $label, 0, array('disabled' => 1));
+            $label = get_string('enableall', 'block_group_network');
+            $radioarr[] = & $mform->createElement('radio', 'group'.$group->id, '', $label, GROUP_NETWORK_ENABLE_MEMBERS, array());
             $mform->setDefault('group'.$group->id, $groupdefault);
             $mform->addGroup($radioarr, 'groupaccess'.$group->id, $grouplabel, array('&nbsp;&nbsp;&nbsp;'), false);
         }
@@ -117,12 +137,7 @@ class block_group_network_group_form extends moodleform {
         $mform->addGroup($group2, 'submits', '', array('&nbsp;&nbsp;'), false);
     }
 
-    function validation($data) {
-        $errors = array();
-        
-        return $errors;
+    public function validation($data, $files) {
+        return parent::validation($data, $files);
     }
-}     
-
-
-?>
+}
