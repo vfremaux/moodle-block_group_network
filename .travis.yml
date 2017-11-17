@@ -25,6 +25,7 @@ before_install:
 
 install:
   - moodle-plugin-ci add-plugin --branch $MOODLE_BRANCH vfremaux/moodle-block_user_mnet_hosts
+
   - moodle-plugin-ci install
 
 script:
