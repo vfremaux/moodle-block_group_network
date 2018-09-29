@@ -14,9 +14,12 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-$string['group_network:manageaccess'] = 'Peut gérer l\'accès réseau des participants';
-$string['group_network:addinstance'] = 'Peut ajouter une instance';
-$string['group_network:myaddinstance'] = 'Peut ajouter une instance à ma page';
+$string['group_network:manageaccess'] = 'Gérer l\'accès réseau des participants';
+$string['group_network:addinstance'] = 'Ajouter une instance';
+$string['group_network:myaddinstance'] = 'Ajouter une instance à ma page';
+
+// Privacy
+$string['privacy:metadata'] = 'Le bloc Contrôle Réseau ne détient directement aucune donnée relative aux utilisateurs.';
 
 $string['accessinstructions'] = 'Pour modifier les accès, sélectionnez les personnes dans la liste appropriée et cliquez sur le bouton d\'ordre correpondant (situé sous la liste).<br/><br/>Attention: plusieurs enseignants peuvent avoir le contrôle d\'accès des mêmes élèves à travers leurs cours. Avant de retirer un accès à un élève, assurez vous qu\'aucune autre raison de lui laisser cet accès n\'existe.';
 $string['accessnetworknotinitialized'] = 'Les fonctions de contrôle d\'accès aux membres du réseau ne sont pas initialisées pour cette plate-forme.';
