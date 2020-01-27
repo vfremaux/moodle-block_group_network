@@ -99,7 +99,7 @@ class block_group_network extends block_list {
 
             // Creating the first link for "single" user networking.
             $singlewizard = get_string('single_netwizard', 'block_group_network');
-            $icon  = '<img src="'.$OUTPUT->pix_url('/t/edit').'" class="icon" />';
+            $icon  = '<img src="'.$OUTPUT->image_url('/t/edit').'" class="icon" />';
             $singleurl = new moodle_url('/blocks/group_network/single.php', array('courseid' => $courseid, 'blockid' => $this->instance->id));
             $this->content->items[] = '<a href="'.$singleurl.'">'.$singlewizard.'</a><br/>';
             $this->content->icons[] = $icon;
@@ -108,7 +108,7 @@ class block_group_network extends block_list {
             $groups = groups_get_all_groups($COURSE->id);
             if (!empty($groups)) {
                 $groupwizard = get_string('group_netwizard', 'block_group_network');
-                $icon  = '<img src="'.$OUTPUT->pix_url('/i/users').'" class="icon" />';
+                $icon  = '<img src="'.$OUTPUT->image_url('/i/users').'" class="icon" />';
                 $groupurl = new moodle_url('/blocks/group_network/group.php', array('courseid' => $courseid, 'blockid' => $this->instance->id));
                 $this->content->items[] = '<a href="'.$groupurl.'">'.$groupwizard.'</a><br/>';
                 $this->content->icons[] = $icon;
