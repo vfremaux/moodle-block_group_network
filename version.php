@@ -18,7 +18,6 @@
  * Version details.
  *
  * @package     block_group_network
- * @category    blocks
  * @author      Valery Fremaux <valery.fremaux@gmail.com>
  * @copyright   2008 onwards Valery Fremaux (valery.fremaux@gmail.com)
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
@@ -26,13 +25,13 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version   = 2019062300;        // The current plugin version (Date: YYYYMMDDXX).
-$plugin->requires  = 2022041200;        // Requires this Moodle version.
+$plugin->version   = 2025011400;        // The current plugin version (Date: YYYYMMDDXX).
+$plugin->requires  = 2022112801;        // Requires this Moodle version.
 $plugin->component = 'block_group_network'; // Full name of the plugin (used for diagnostics).
 $plugin->maturity = MATURITY_STABLE;
-$plugin->release = '4.0.0 (build 2019062300)';
+$plugin->release = '4.5.0 (build 2025011400)';
+$plugin->supported = [401, 405];
 $plugin->dependencies = array('block_user_mnet_hosts' => '*');
-$plugin->supported = [40,40];
 
 // Non moodle attributes.
-$plugin->codeincrement = '4.0.0000';
+$plugin->codeincrement = '4.5.0000';
